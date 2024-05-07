@@ -108,6 +108,25 @@ namespace adonet_db_videogame
                         }
                         break;
 
+                    // RICERCA DEL VIDEOGIOCO CON IL NOME O PARTE DI ESSO
+                    case 3:
+                        Console.Write("Inserisci il nome del videogioco o parte di esso da cercare: ");
+                        string searchGame = Console.ReadLine();
+                        var gamesFound = manager.GetVideogamesByName(searchGame);
+                        if (gamesFound.Count > 0)
+                        {
+                            Console.WriteLine("Videogiochi trovati:");
+                            foreach (var game in gamesFound)
+                            {
+                                Console.WriteLine($"Nome: {game.Name} \nDesscrizione: {game.Overview} \nData di rilascio: {game.ReleaseDate}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nessun videogioco trovato in base a ciò che hai scritto.");
+                        }
+                        break;
+
                     
 
                     case 5:
