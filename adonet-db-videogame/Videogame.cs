@@ -58,9 +58,9 @@ namespace adonet_db_videogame
 
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception error)
             {
-                Console.Write(ex.ToString());
+                Console.Write(error.ToString());
             }
             finally
             {

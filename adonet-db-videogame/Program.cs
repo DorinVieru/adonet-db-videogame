@@ -127,7 +127,26 @@ namespace adonet_db_videogame
                         }
                         break;
 
-                    
+                    // CANCELLAZIONE DI UN VIDEOGIOCO
+                    case 4:
+                        Console.Write("Inserisci l'ID del videogioco che vuoi cancellare: ");
+                        if (int.TryParse(Console.ReadLine(), out int deleteID))
+                        {
+                            try
+                            {
+                                manager.DeleteVideogame(deleteID);
+                                Console.WriteLine($"Videogioco selezionato cancellato con successo.");
+                            }
+                            catch (Exception error)
+                            {
+                                Console.WriteLine($"Errore: {error.Message}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("ID non valido o non trovato. Riprova.");
+                        }
+                        break;
 
                     case 5:
                         Console.WriteLine("Programma chiuso con usccesso. Ciao ciao!");
