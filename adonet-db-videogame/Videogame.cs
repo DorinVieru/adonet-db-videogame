@@ -104,33 +104,49 @@ namespace adonet_db_videogame
         {
             List<Videogame> videogames = new List<Videogame>();
 
-            using (SqlConnection connection = new SqlConnection(STRINGA_DI_CONNESSIONE))
-            {
-                string query = @$"SELECT * FROM {NOME_DATABASE} 
+            using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
+                
+            string query = @$"SELECT * FROM {NOME_DATABASE} 
                                   WHERE name LIKE @SearchGame";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@SearchGame", "%" + searchGame + "%");
+            SqlCommand command = new SqlCommand(query, connessioneSql);
+            command.Parameters.AddWithValue("@SearchGame", "%" + searchGame + "%");
 
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+            connessioneSql.Open();
+            SqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
-                {
-                    videogames.Add(new Videogame
-                    (
-                        name: reader["name"].ToString(),
-                        overview: reader["overview"].ToString(),
-                        releaseDate: reader["release_date"].ToString(),
-                        createdAt: (DateTime)reader["created_at"],
-                        updatedAt: (DateTime)reader["updated_at"],
-                        softwareHouseId: Convert.ToInt32(reader["software_house_id"])
-                    ));
-                }
+            while (reader.Read())
+            {
+                videogames.Add(new Videogame
+                (
+                    name: reader["name"].ToString(),
+                    overview: reader["overview"].ToString(),
+                    releaseDate: reader["release_date"].ToString(),
+                    createdAt: (DateTime)reader["created_at"],
+                    updatedAt: (DateTime)reader["updated_at"],
+                    softwareHouseId: Convert.ToInt32(reader["software_house_id"])
+                ));
             }
 
             return videogames;
         }
 
-        
+        // FUNCTION PER CANCELLARE UN VIDEOGIOCO
+        public void DeleteVideogame(int id)
+        {
+            using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
+
+            string query = @$"DELETE FROM {NOME_DATABASE} 
+                                WHERE id = @Id";
+            SqlCommand command = new SqlCommand(query, connessioneSql);
+            command.Parameters.AddWithValue("@Id", id);
+
+            connessioneSql.Open();
+            int affectedRows = command.ExecuteNonQuery();
+
+            if (affectedRows == 0)
+            {
+                throw new Exception("Il videogioco specificato non esiste.");
+            }
+        }
     }
 }
