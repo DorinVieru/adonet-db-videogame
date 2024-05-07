@@ -86,6 +86,27 @@ namespace adonet_db_videogame
                         // INSERIMENTO DEL GIOCO NELLA TABELLA
                         VideogameMenager.InsertVideogame(name, overview, releaseDate, createdAt, updatedAt, softwareHouseId);
                         break;
+                    
+                    // RICERCA GIOCO TRAMITE ID
+                    case 2:
+                        Console.Write("Inserisci l'ID per cercare il videogioco: ");
+                        if (int.TryParse(Console.ReadLine(), out int id))
+                        {
+                            var videogame = manager.GetVideogameById(id);
+                            if (videogame != null)
+                            {
+                                Console.WriteLine($"Videogioco trovato: {videogame.Name} \nRilasciato il: {videogame.ReleaseDate}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Nessun videogioco trovato con l'ID specificato.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("ID inserito non valido. Riprova con attenzione.");
+                        }
+                        break;
 
                     
 
