@@ -34,6 +34,7 @@ namespace adonet_db_videogame
         public const string STRINGA_DI_CONNESSIONE = "Data Source=localhost; Initial Catalog=master; Integrated Security=True;";
         public const string NOME_DATABASE = "videogames";
 
+        // FUNCTION PER INSERIRE UN NUOVO VIDEOGAME
         public static void InsertVideogame(string name, string overview, string releaseDate, DateTime createdAt, DateTime updatedAt, int softwareHouseId)
         {
             Videogame NewVideogame = new Videogame(name, overview, releaseDate, createdAt, updatedAt, softwareHouseId);
@@ -67,6 +68,7 @@ namespace adonet_db_videogame
             }
         }
 
+        // FUNCTION PER TROVARE UN VIDEOGAME TRAMITE L'ID
         public Videogame GetVideogameById(int id)
         {
             using SqlConnection connessioneSql = new SqlConnection(STRINGA_DI_CONNESSIONE);
@@ -97,6 +99,38 @@ namespace adonet_db_videogame
             }
         }
 
-       
+        // FUNCTION PER TROVARE UN VIDEOGAME IN BASE AL SUO NOME O PARTE DI ESSO
+        public List<Videogame> GetVideogamesByName(string searchGame)
+        {
+            List<Videogame> videogames = new List<Videogame>();
+
+            using (SqlConnection connection = new SqlConnection(STRINGA_DI_CONNESSIONE))
+            {
+                string query = @$"SELECT * FROM {NOME_DATABASE} 
+                                  WHERE name LIKE @SearchGame";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@SearchGame", "%" + searchGame + "%");
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    videogames.Add(new Videogame
+                    (
+                        name: reader["name"].ToString(),
+                        overview: reader["overview"].ToString(),
+                        releaseDate: reader["release_date"].ToString(),
+                        createdAt: (DateTime)reader["created_at"],
+                        updatedAt: (DateTime)reader["updated_at"],
+                        softwareHouseId: Convert.ToInt32(reader["software_house_id"])
+                    ));
+                }
+            }
+
+            return videogames;
+        }
+
+        
     }
 }
