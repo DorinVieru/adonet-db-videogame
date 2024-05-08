@@ -62,10 +62,6 @@ namespace adonet_db_videogame
             {
                 Console.Write(error.ToString());
             }
-            finally
-            {
-                connessioneSql.Close();
-            }
         }
 
         // FUNCTION PER TROVARE UN VIDEOGAME TRAMITE L'ID
